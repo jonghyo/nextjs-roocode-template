@@ -1,0 +1,14 @@
+{
+  "extends": ["./tsconfig.json"],
+  "compilerOptions": {
+    "target": "ES6"
+  },
+  "include": [
+    ".storybook/**/*",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mjs",
+    "**/*.cjs",
+    "vite.config.mts"
+  ]
+}

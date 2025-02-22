@@ -1,0 +1,22 @@
+{
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": [
+    "source.addMissingImports",
+    "source.fixAll.eslint"
+  ],
+  "editor.formatOnSaveMode": "modifications",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.indentSize": "tabSize",
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "eslint.useFlatConfig": true,
+  "files.eol": "\n",
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/{*.tsx,route.ts,actions.ts}": "${dirname(1)}/${dirname} ∙ ${filename}",
+    "**/src/**/{*.tsx,*.ts}": "${dirname}/${filename}.${extname}"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
