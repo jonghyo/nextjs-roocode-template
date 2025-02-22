@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  commands:
+    formatting:
+      glob: '*.{js,ts,jsx,tsx,md,mdx,json,yml}'
+      run: npx prettier --write "{staged_files}"
+    lint:
+      glob: '*.{js,ts,jsx,tsx}'
+      run: npx eslint --no-warn-ignored --max-warnings 0 {staged_files}
+    tsc:
+      glob: '*.{js,ts,jsx,tsx}'
+      run: npx tsc --noEmit -p ./tsconfig.json
+    secretlint:
+      glob: '*'
+      run: npx secretlint --maskSecrets --secretlintignore .gitignore "{staged_files}"
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint -e
