@@ -22,7 +22,15 @@ const config = {
     testTimeout: 20000,
     coverage: {
       provider: 'v8',
-      reporter: ['cobertura', 'lcov', 'json', 'html', 'text', 'text-summary'],
+      reporter: [
+        'cobertura',
+        'lcov',
+        'json',
+        'html',
+        'text',
+        'text-summary',
+        'json-summary'
+      ],
       reportsDirectory: './coverage',
       reportOnFailure: true,
       watermarks: {
