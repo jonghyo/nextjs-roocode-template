@@ -79,6 +79,7 @@
     "npm-run-all2": "^7.0.2",
     "postcss": "^8",
     "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "secretlint": "^9.0.0",
     "storybook": "^8.4.7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
