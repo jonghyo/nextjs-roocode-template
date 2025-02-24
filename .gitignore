@@ -15,6 +15,9 @@
 /.next/
 /out/
 
+# TypeScript cache
+.ts-cache
+
 # production
 /build
 
