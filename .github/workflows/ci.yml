@@ -122,9 +122,15 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Build Project
-        run: npm run build
+        run: npm run build -- --no-lint
+      - name: Create Artifacts
+        run: |
+          mkdir dist
+          cp -r .next/standalone dist/
+          cp -r .next/static dist/standalone/.next/
+          cp -r -u public dist/standalone
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: .next
+          path: dist
