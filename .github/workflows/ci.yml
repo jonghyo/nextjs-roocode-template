@@ -146,10 +146,8 @@ jobs:
         run: npm run build -- --no-lint
       - name: Create Artifacts
         run: |
-          ls -alh
-          ls -ahl .next/
           mkdir -p dist
-          cp -r .next/standalone dist/
+          cp -r .next/standalone/{.,}* dist/
           cp -r .next/static dist/standalone/.next/
           cp -r -u public dist/standalone
       - name: Upload Build Artifacts
