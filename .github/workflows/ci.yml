@@ -117,11 +117,13 @@ jobs:
         with:
           name: coverage-report
           path: coverage
+          include-hidden-files: true
       - name: Upload Test Reports Artifact
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: reports
+          include-hidden-files: true
 
   build:
     name: Build
@@ -147,6 +149,7 @@ jobs:
       - name: Create Artifacts
         run: |
           mkdir -p dist
+          mkdir -p dist/standalone/.next
           cp -r .next/standalone/{.,}* dist/
           cp -r .next/static dist/standalone/.next/
           cp -r -u public dist/standalone
@@ -155,3 +158,4 @@ jobs:
         with:
           name: build-artifacts
           path: dist
+          include-hidden-files: true
