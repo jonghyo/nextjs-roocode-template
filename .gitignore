@@ -18,6 +18,9 @@
 # TypeScript cache
 .ts-cache
 
+# Cline
+commit_message.txt
+
 # production
 /build
 
