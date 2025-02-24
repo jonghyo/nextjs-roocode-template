@@ -4,6 +4,10 @@ on:
     types:
       - opened
 
+defaults:
+  run:
+    shell: bash
+
 permissions:
   pull-requests: write
   contents: write

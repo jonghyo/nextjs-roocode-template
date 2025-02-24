@@ -1,15 +1,35 @@
 name: CI
 
 on:
+  # 動作確認しやすいように手動起動をサポート
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
     branches: [main]
 
+# ワークフローレベルでパーミッションをすべて無効化
+permissions: {}
+
+# デフォルトシェルでパイプエラーを有効化
+defaults:
+  run:
+    shell: bash
+
+# 1ブランチで1ワークフローのみ実行。連続でジョブが実行されるのを抑制
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   eslint:
     name: ESLint
     runs-on: ubuntu-latest
+    # 6時間も待たされないようにタイムアウトを設定
+    timeout-minutes: 5
+    # ジョブレベルで必要最小限のパーミッションを定義
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -23,6 +43,11 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('package.json', 'package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
+      - name: Cache ESLint
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/eslint
+          key: ${{ runner.os }}-eslint-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**/eslint*.{js,json}') }}
       - name: Install Dependencies
         run: npm ci
       - name: Run ESLint
@@ -31,6 +56,9 @@ jobs:
   tsc:
     name: tsc
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -52,6 +80,9 @@ jobs:
   npm_audit:
     name: npm audit
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -73,6 +104,9 @@ jobs:
   knip:
     name: Knip
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -95,6 +129,12 @@ jobs:
   unit_test:
     name: Unit Test
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -132,6 +172,10 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write
     needs: [eslint, tsc, knip, unit_test, npm_audit]
     steps:
       - uses: actions/checkout@v4
@@ -162,8 +206,3 @@ jobs:
           name: build-artifacts
           path: dist
           include-hidden-files: true
-
-# 1ブランチで1ワークフローのみ実行。連続でジョブが実行されるのを抑制
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true

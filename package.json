@@ -9,7 +9,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage",
-    "lint": "eslint --max-warnings 0",
+    "lint": "eslint --max-warnings 0 --cache --cache-strategy content --cache-location node_modules/.cache/eslint/",
     "lint:inspect": "eslint --inspect-config",
     "lint:build-inspect": "npx @eslint/config-inspector build",
     "storybook": "storybook dev -p 6006",
