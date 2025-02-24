@@ -67,7 +67,7 @@ jobs:
             ${{ runner.os }}-npm-
       - name: Install Dependencies
         run: npm ci
-      - name: Run Audit
+      - name: Run npm audit
         run: npm audit --audit-level=moderate --omit=dev
 
   knip:
@@ -126,7 +126,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [eslint, tsc, knip, unit_test]
+    needs: [eslint, tsc, knip, unit_test, npm_audit]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -146,7 +146,9 @@ jobs:
         run: npm run build -- --no-lint
       - name: Create Artifacts
         run: |
-          mkdir dist
+          ls -alh
+          ls -ahl .next/
+          mkdir -p dist
           cp -r .next/standalone dist/
           cp -r .next/static dist/standalone/.next/
           cp -r -u public dist/standalone
