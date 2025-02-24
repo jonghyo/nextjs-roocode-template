@@ -78,7 +78,7 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "jsdom": "^25.0.1",
     "knip": "^5.44.5",
-    "lefthook": "^1.10.0",
+    "lefthook": "^1.11.0",
     "msw": "^2.7.0",
     "npm-run-all2": "^7.0.2",
     "postcss": "^8",
