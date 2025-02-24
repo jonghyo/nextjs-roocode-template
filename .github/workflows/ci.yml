@@ -149,8 +149,7 @@ jobs:
       - name: Create Artifacts
         run: |
           mkdir -p dist
-          mkdir -p dist/standalone/.next
-          cp -r .next/standalone/{.,}* dist/
+          cp -r .next/standalone dist/
           cp -r .next/static dist/standalone/.next/
           cp -r -u public dist/standalone
       - name: Upload Build Artifacts
