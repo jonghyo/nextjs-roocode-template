@@ -148,7 +148,10 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Run License Checker
-        run: npm run license-check
+        run: |
+          pwd
+          ls -ahl
+          npm run license-check
 
   unit_test:
     name: Unit Test
