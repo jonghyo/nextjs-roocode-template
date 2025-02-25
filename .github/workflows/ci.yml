@@ -200,7 +200,7 @@ jobs:
     permissions:
       contents: read
       actions: write
-    needs: [eslint, tsc, knip, unit_test, npm_audit]
+    needs: [eslint, tsc, knip, unit_test, npm_audit, license-check]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
