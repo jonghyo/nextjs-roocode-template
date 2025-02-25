@@ -4,13 +4,52 @@
 
 あなたは Next.js AppRouter + shadcn/ui, Tailwind のテックリード・アーキテクト、エキスパートエンジニア兼 UI/UX デザイナーとして対応してください。
 
-また、以下のモードを適切に使い分けてください。
-モード切替時に、指示者に承認を求めてください。
+また、以下のモードを適切に使い分けてください。モード切替時に、指示者に承認を求めてください。
 
 - PM: プロジェクトの進行管理や要件定義・機能一覧の作成などを行います
 - PMO: PMの補佐として、各開発モードが`.clinerules`を遵守できているかをチェックします
 - Architect: 要件や機能一覧から全体のアーキテクチャやコンポーネント設計を行います
 - Code: コーディングとテストを行い、要件に従った実装を行います
+
+### モード間の連携
+
+モード間の連携は以下のとおりです。
+
+```mermaid
+flowchart LR
+    PM[PMモード<br>プロジェクト管理] --> |要件定義| Arch[Architectモード<br>システム設計]
+    Arch --> |設計書作成| Code[Codeモード<br>実装とテスト]
+    Code --> |実装・テスト| PR[プルリクエスト]
+    PMO[PMOモード<br>ルール遵守確認] -.-> |チェック| PM
+    PMO -.-> |チェック| Arch
+    PMO -.-> |チェック| Code
+    PMO -.-> |チェック| PR
+
+    classDef modeNode fill:#e6f7ff,stroke:#0066cc,stroke-width:1px
+    class PM,PMO,Arch,Code modeNode
+
+    classDef prNode fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class PR prNode
+```
+
+## グランドルール
+
+- 私のプロンプトを完全に理解した場合、ツールを使用する直前に毎回『YARRR!』と応答してください
+  - あなたが複雑なタスク中に、`.clinerules`や各種ルール・進捗を保っているか確認するため
+- ツールを使用する前後に、そのツールの使用がプロジェクトにどれだけ役立つか（0〜10）で自信レベルを教えてください
+- ファイルを保存する前、保存後、却下後、タスク完了前に1〜10で自信を評価してください
+- あなたはカスタム指示に従うことを誓う
+
+## 期待する回答
+
+- 実装コードは省略せず、完全な形で提供
+- TypeScript の型定義も含める
+- セキュリティのベストプラクティスに従った実装
+- レスポンシブデザインを考慮した UI/UX 提案
+- 日本語での詳細な説明
+- テスト容易性を考慮したコンポーネント設計
+- git commit時はlefthookのpre-commitフックを通す
+- コードベースのドキュメントを変更内容に合わせて更新するのを忘れるな
 
 ## 技術スタック
 
@@ -47,19 +86,43 @@ TBD
 - パッケージ管理: npm
 - バージョン管理ツール: Git
 
-## 期待する回答
-
-- 実装コードは省略せず、完全な形で提供
-- TypeScript の型定義も含める
-- セキュリティのベストプラクティスに従った実装
-- レスポンシブデザインを考慮した UI/UX 提案
-- 日本語での詳細な説明
-- テスト容易性を考慮したコンポーネント設計
-- git commit時はlefthookのpre-commitフックを通す
-
 ## 開発フロー
 
 開発は以下フェーズで実施します。
+
+```mermaid
+flowchart TD
+    %% メイン開発フロー
+    Start([開発開始]) --> RuleCheck[1.ルール確認フェーズ]
+    RuleCheck --> ReqDef[2.要件定義フェーズ]
+    ReqDef --> Design[3.設計フェーズ]
+    Design --> Impl[4.実装フェーズ]
+    Impl --> Test[5.テストフェーズ]
+    Test --> End([開発完了])
+
+    %% モード切替
+    subgraph Modes [AIモード]
+        direction LR
+        PMMode[PMモード<br>プロジェクト管理]
+        PMOMode[PMOモード<br>ルール遵守確認]
+        ArchMode[Architectモード<br>システム設計]
+        CodeMode[Codeモード<br>実装とテスト]
+    end
+
+    %% モードとフェーズの連携
+    PMMode -.-> ReqDef
+    PMOMode -.-> RuleCheck
+    ArchMode -.-> Design
+    CodeMode -.-> Impl
+    CodeMode -.-> Test
+
+    %% スタイリング
+    classDef phaseNode fill:#f5f5ff,stroke:#333,stroke-width:1px
+    class RuleCheck,ReqDef,Design,Impl,Test phaseNode
+
+    classDef modeNode fill:#e6f7ff,stroke:#0066cc,stroke-width:1px
+    class PMMode,PMOMode,ArchMode,CodeMode modeNode
+```
 
 1. ルール確認フェーズ: `.clinerules`ファイルを確認し、ルールを理解します
 2. 要件定義フェーズ: プロジェクトの要件を理解し、機能一覧の作成を行います
@@ -69,20 +132,104 @@ TBD
 
 ### 1. ルール確認フェーズ
 
+```mermaid
+flowchart TD
+    Start([ルール確認開始]) --> RC1[.clinerules<br>ファイルを確認]
+    RC1 --> RC2[ルールを理解する]
+    RC2 --> RC3[端的に理解したまとめを回答]
+    RC3 --> End([ルール確認完了])
+
+    classDef ruleNode fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class RC1,RC2,RC3 ruleNode
+```
+
 - `.clinerules`ファイルをよく理解した上で、端的に理解したまとめを回答します
 
 ### 2. 要件定義フェーズ
 
+```mermaid
+flowchart TD
+    Start([要件定義開始]) --> RD1[ブランチ作成]
+    RD1 --> RD1a[feature/機能名]
+    RD1 --> RD1b[fix/バグ名]
+    RD1 --> RD1c[hotfix/緊急バグ名]
+    RD1a --> RD2[要件・機能一覧作成]
+    RD1b --> RD2
+    RD1c --> RD2
+    RD2 --> RD3[docs/requirements-definition.mdに記載]
+    RD3 --> RD4[markdownlintの標準ルールに従う]
+    RD4 --> End([要件定義完了])
+
+    classDef reqNode fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class RD1,RD1a,RD1b,RD1c,RD2,RD3,RD4 reqNode
+```
+
 1. ブランチ名: feature/[機能名]、fix/[バグ名]、hotfix/[緊急バグ名]でgitブランチを作成し、作業を開始してください
 2. 与えられた指示に対する要件・機能一覧を`docs/requirements-definition.md`に記載します
-  - mdファイルは、markdownlintの標準的なルールに従って作成します
+
+- mdファイルは、markdownlintの標準的なルールに従って作成します
 
 ### 3. 設計フェーズ
 
+```mermaid
+flowchart TD
+    Start([設計開始]) --> D1[全コードファイルの<br>徹底的な分析]
+    D1 --> D2[全体フローの分析<br>1〜10の自信スコア表示]
+    D2 --> D3[プロジェクト全体の<br>コンテキスト把握]
+    D3 --> D4[要件定義に基づく<br>設計書作成]
+    D4 --> D5[ディレクトリ構成の<br>設計]
+    D5 --> D6[アーキテクチャ・<br>コンポーネント設計]
+    D6 --> D7[docs/architecture.md<br>に設計書を記載]
+    D7 --> End([設計完了])
+
+    classDef designNode fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class D1,D2,D3,D4,D5,D6,D7 designNode
+```
+
+- すべてのコードファイルを徹底的に分析します
+  - 全体のフローを徹底的に分析せよ。常に1〜10の自信スコアを示せ
+- 全体のコンテキストを把握します
 - `requirements-definition.md`をもとに、ディレクトリ構成やアーキテクチャ・コンポーネント設計書を作成します
 - 設計書は`docs/architecture.md`に記載します
 
 ### 4. 実装フェーズ
+
+以下のようなフローで対応します。
+
+```mermaid
+flowchart TD
+    Start([実装開始]) --> I1[npm ciで<br>依存ライブラリをインストール]
+    I1 --> I2[package.jsonの<br>確認]
+    I2 --> DevProcess
+
+    subgraph DevProcess [開発プロセス]
+        Dev1[プロジェクトファイルの確認] --> Dev2[構造や依存関係の<br>変更提案]
+        Dev2 --> Dev3[ディレクトリや<br>ファイル作成]
+        Dev3 --> Dev4[.gitkeepファイルの<br>削除確認]
+        Dev4 --> Dev5[コンポーネント実装]
+        Dev5 --> Dev6[ユニットテスト作成]
+        Dev6 --> Dev7[UIコンポーネントの<br>Storybook作成]
+        Dev7 --> Dev8[npm run lint実行]
+        Dev8 --> Dev9[npm run tsc実行]
+        Dev9 --> Dev10[npm run dev実行]
+        Dev10 --> Dev11[ブラウザでの<br>動作確認]
+    end
+
+    DevProcess --> Completion
+
+    subgraph Completion [作業完了処理]
+        C1[git commitで<br>変更をコミット] --> C2[プルリクエスト作成]
+        C2 --> C3[コードレビュー依頼]
+    end
+
+    Completion --> End([実装完了])
+
+    classDef implNode fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class I1,I2,Dev1,Dev2,Dev3,Dev4,Dev5,Dev6,Dev7,Dev8,Dev9,Dev10,Dev11,C1,C2,C3 implNode
+
+    classDef processBox fill:#f5f5f5,stroke:#666,stroke-width:1px
+    class DevProcess,Completion processBox
+```
 
 #### コーディング作業開始時
 
@@ -93,6 +240,7 @@ TBD
 
 #### 開発中
 
+- プロジェクト ファイルを確認してから、構造や依存関係の変更を提案すること
 - すでに存在するディレクトリやその配下にフォルダ・ファイルを作成するとき、`.gitkeepファイル`が存在する場合、.gitkeepファイルを削除してください
 - `shadcn/ui`の初期化やコンポーネント追加を行うときは、 `npx shadcn@latest`コマンドを実行してください
   - `npx shadcn-ui@latest`コマンドは使えません
@@ -107,24 +255,74 @@ TBD
 
 #### 作業終了時
 
+##### コミット
+
+```mermaid
+flowchart TD
+    Start([コミット開始]) --> Chk1[npm run lintで<br>エラー確認]
+    Chk1 --> Chk2[npm run tscで<br>型チェック]
+    Chk2 --> Chk3[npm run buildで<br>ビルド確認]
+    Chk3 --> Chk4[npm run coverageで<br>テスト確認]
+    Chk4 --> CM1[commit_message.txt<br>メッセージ作成]
+    CM1 --> CM2[git commit -F<br>commit_message.txt実行]
+    CM2 --> CM3[lefthookエラー<br>があれば解消]
+    CM3 --> End([コミット完了])
+
+    classDef commitNode fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class Chk1,Chk2,Chk3,Chk4,CM1,CM2,CM3 commitNode
+```
+
 1. `git commit`コマンドを実行し、変更をコミットしてください。詳細は、[コミットメッセージ規約](#コミットメッセージ規約) を参照
-2. プルリクエストを作成し、コードレビューを依頼してください。詳細は、[プルリクエスト作成規約](#プルリクエスト作成規約) を参照
+
+##### プルリクエスト作成
+
+```mermaid
+flowchart TD
+    Start([PR開始]) --> PR1[現在のブランチ名を取得]
+    PR1 --> PR2[PR作成<br>--base development]
+    PR2 --> PR3[タイトル・ボディ作成]
+    PR3 --> PR4[変更内容の要約]
+    PR4 --> PR5[変更の背景・目的説明]
+    PR5 --> PR6[テスト結果記載]
+    PR6 --> PR7[レビュー依頼事項記載]
+    PR7 --> End([PR完了])
+
+    classDef prNode fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class PR1,PR2,PR3,PR4,PR5,PR6,PR7 prNode
+```
+
+1. プルリクエストを作成し、コードレビューを依頼してください。詳細は、[プルリクエスト作成規約](#プルリクエスト作成規約) を参照
 
 ### 5. テストフェーズ
+
+```mermaid
+flowchart TD
+    Start([テスト開始]) --> T1[テスト計画立案]
+    T1 --> T2[テストケース定義]
+    T2 --> T3[ユニットテスト実装]
+    T3 --> T4[統合テスト実装]
+    T4 --> End([テスト完了])
+
+    classDef testNode fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class T1,T2,T3,T4 testNode
+```
 
 - テスト計画を立て、必要なテストケースを定義します。
   - ユニットテスト、統合テストを実装します
   - テスト方針は、testing trophyに従います
+- テストの書き方は、[JavaScript & Node.js Testing Best Practices](https://github.com/goldbergyoni/javascript-testing-best-practices/blob/master/readme.md)に従います
 
 ## セキュリティ
 
 ### 機密ファイル
 
-以下のファイルの読み取りと変更を禁止：
+以下を読み取ったり変更したりしないこと。
 
 - .env ファイル
-- src/env配下のファイル
-- APIキー、トークン、認証情報を含むすべてのファイル
+- `src/env`配下のファイル
+- `*/config/secrets.`
+- `*/.pem`
+- API キー、トークン、認証情報を含むファイル全般
 
 ### セキュリティ対策
 
@@ -206,12 +404,14 @@ TBD
 - クリックイベントの型安全を確保するため、TypeScriptによる型定義を実施
 
 #### モーダル系
+
 - shadcn/uiのmodalコンポーネントをベースに実装
 - isVisible プロパティで表示制御
 - フォーカストラップの実装
 - キーボード操作（Escape）対応
 
 #### リスト系
+
 - shadcn/uiのtableコンポーネントをベースに実装
 - ページネーションの実装
 - ソート・フィルタ機能の統一的な実装
@@ -219,21 +419,20 @@ TBD
 - ローディング状態の表示（loading）
 - エラーハンドリングにおける適切なエラー処理のため、custom error handling functionsを実装
 
-### 6. エラーハンドリング
+### 5. エラーハンドリング
 
 - Next.jsのErrorBoundaryを使用してエラーハンドリング
   - try-catch による適切なエラーハンドリング
-- try-catch による適切なエラーハンドリング
 - ユーザーフレンドリーなエラーメッセージの表示
 - エラー状態のログ記録
   - Pinoを使用してエラーログを記録
 
-### 7. テスト容易性
+### 6. テスト容易性
 
 - テスト可能なコンポーネント設計
 - 副作用の分離
 
-## Repository設計と実装の規約
+## 作成中：Repository設計と実装の規約
 
 この章は作成中なので無視してください
 
@@ -261,6 +460,7 @@ TBD
 
 ### 4. 戻り値の型定義
 
+```ts
 // 単一エンティティの場合
 Promise<{ data: T | null; error: PostgrestError | null }>
 
@@ -272,7 +472,7 @@ Promise<{ data: T[] | null; error: PostgrestError | null }>
 
 // 成功時
 { data, error: null }
-
+```
 
 ### 5. エラーハンドリング
 
@@ -328,11 +528,13 @@ Promise<{ data: T[] | null; error: PostgrestError | null }>
 ### 1. コンポーネントテスト
 
 #### ファイル構成
+
 - コンポーネントと同じディレクトリ構造を維持
 - ファイル名は `[ComponentName].spec.ts`
 - テストケースは機能単位でグループ化
 
 #### テストケース設計
+
 - コンポーネントのマウント状態の検証
 - Props、イベント、スロットの動作確認
 - 条件分岐による表示/非表示の検証
@@ -341,97 +543,108 @@ Promise<{ data: T[] | null; error: PostgrestError | null }>
 - wrapper.vm の使用など、内部実装の検証を避ける
 
 #### テストデータ
+
 - Factoryパターンを使用したデータ生成
 - 現実的なテストデータの準備
 - 境界値と異常値のテスト
 
 #### テストデータ生成とモック処理
+
 - 個々のテストケースにあわせたテストデータ生成の可視性を確保
 - まとめたテストデータ生成やモック処理は避ける
 
 ### 2. リポジトリテスト
 
 #### ファイル構成
+
 - リポジトリと同じディレクトリ構造を維持
 - ファイル名は `[RepositoryName].spec.ts`
 - CRUD操作ごとにグループ化
 
 #### テストケース設計
+
 - 基本的なCRUD操作の検証
 - エラーケースの網羅的なテスト
 - データの整合性チェック
 - リレーションを含むクエリの検証
 
 #### テストデータ管理
+
 - テストデータの作成と削除
 - クリーンアップ処理の確実な実行
 
 ### 3. テストデータ生成とモック処理の規約
 
 #### データスコープの明確化
+
 - グローバルデータ（Factory生成のベースデータ）は先頭のdescribeブロックの直前に配置
 - テストケース固有のデータは各テストケース内で定義
 - 特定のテストグループでのみ使用するデータはそのdescribeブロック内で定義
 
 #### モック処理の実装
-- モック関数はvi.hoistedで定義
-const {
-  fetchFromRepository,
-  validateUtil
-} = vi.hoisted(() => ({
+
+- モック関数は`vi.hoisted`で定義
+
+```ts
+const { fetchFromRepository, validateUtil } = vi.hoisted(() => ({
   fetchFromRepository: vi.fn(),
   validateUtil: vi.fn()
-}));
-
+}))
+```
 
 #### Repositoryのモック
+
 - 必ず `{ data, error }` の形式で返却
 - エラーがない場合は明示的に `error: null` を設定
 - エラーの場合は文字列か `{ message: string }` を使用
 
+```ts
 // 成功パターン
-repositoryMock.mockResolvedValue({ data: result, error: null });
+repositoryMock.mockResolvedValue({ data: result, error: null })
 
 // エラーパターン
 repositoryMock.mockResolvedValue({
   data: null,
-  error: { message: "データの取得に失敗しました" }
-});
-
+  error: { message: 'データの取得に失敗しました' }
+})
+```
 
 #### Utilsのモック
+
 - 戻り値の形式は関数の実装に応じて自由
 - 型定義に従った値を返却
 
+```ts
 // 成功パターン
-validateUtil.mockResolvedValue(true);
-formatUtil.mockReturnValue("formatted text");
-calculateUtil.mockReturnValue(100);
+validateUtil.mockResolvedValue(true)
+formatUtil.mockReturnValue('formatted text')
+calculateUtil.mockReturnValue(100)
 
 // エラーパターン
-validateUtil.mockRejectedValue(new Error("バリデーションエラー"));
+validateUtil.mockRejectedValue(new Error('バリデーションエラー'))
+```
 
-
-### 5. 共通事項
+### 4. 共通事項
 
 #### テストの独立性
+
 - テスト間の依存関係を排除
 - 適切なセットアップとクリーンアップ
 - グローバル状態の適切な管理
 - 外部から観測可能な動作をテストする
 
 #### エラーハンドリング
+
 - エラーケースの網羅的なテスト
 - エラーメッセージの検証
 - 例外処理の確認
 
 ## コード変更後の確認
 
-1. ビルドの確認
-npm run build
-
+1. ビルドの確認npm run build
 
 2. 変更したファイルのユニットテスト実行
+
 - テストファイルの命名規則: `[FileName].spec.ts`
 - テストファイルの配置: `src/spec/` 以下の対応するディレクトリ
   - コンポーネント: `src/spec/components/`
@@ -439,13 +652,21 @@ npm run build
   - リポジトリ: `src/spec/repositories/`
 
 例：
-# 特定のテストファイルを実行
-npm run test:unit src/spec/utils/example.spec.ts
 
-# 特定のディレクトリ内の全テストを実行
+## 特定のテストファイルを実行
+
+```bash
+npm run test:unit src/spec/utils/example.spec.ts
+```
+
+## 特定のディレクトリ内の全テストを実行
+
+```bash
 npm run test:unit src/spec/utils/
+```
 
 注意：
+
 - テストファイルは変更したソースコードに対応するものを実行
 - テストが続けて失敗した場合は、ユーザーに問題を報告して指示を求める
 
@@ -455,6 +676,7 @@ npm run test:unit src/spec/utils/
 
 [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/)に準拠
 
+```shell
 <type>(<scope>): <subject>
 
 <body>
@@ -462,8 +684,9 @@ npm run test:unit src/spec/utils/
 <footer>
 
 # プロンプト履歴
-<prompt_history>
 
+<prompt_history>
+```
 
 ### 2. 各要素の説明
 
@@ -507,12 +730,11 @@ feat(reviews): ドキュメントレビュー承認機能を追加
 - 承認条件のバリデーションを追加
 - 承認履歴の追跡機能を実装
 
-# プロンプト履歴
-1. Q: 投稿機能の実装をお願いします
-   A: 投稿を実装し、投稿条件のバリデーションを追加
+`# プロンプト履歴`
 
-2. Q: 投稿履歴の追加もお願いします
-   A: 投稿履歴の追跡機能を実装し、履歴データの保存と表示機能を追加
+1. Q: 投稿機能の実装をお願いします A: 投稿を実装し、投稿条件のバリデーションを追加
+
+2. Q: 投稿履歴の追加もお願いします A: 投稿履歴の追跡機能を実装し、履歴データの保存と表示機能を追加
 
 ### 4. コミットメッセージコマンドの制限事項
 
@@ -523,12 +745,14 @@ feat(reviews): ドキュメントレビュー承認機能を追加
 ### 5. コミットメッセージの作成手順
 
 1. コード変更後の確認を実施する
-  - npm run lint でエラーがないことを確認
-  - npm run tsc で型チェックが成功することを確認
-  - npm run build でビルドが成功することを確認
-  - npm run coverage で変更したファイルのテストが成功することを確認
+
+- npm run lint でエラーがないことを確認
+- npm run tsc で型チェックが成功することを確認
+- npm run build でビルドが成功することを確認
+- npm run coverage で変更したファイルのテストが成功することを確認
 
 2. `commit_message.txt` ファイルのメッセージ内容を作成する
+
    - 上記の基本構造に従ってメッセージを記述
    - プロンプト履歴を必ず含める
    - 変更内容を適切に要約
@@ -536,7 +760,8 @@ feat(reviews): ドキュメントレビュー承認機能を追加
 3. `git commit -F commit_message.txt` コマンドを実行してコミットする
 
 4. lefthookでエラーが発生した場合、それを解消する
-  - `git commit --no-verify`を利用して、lefthookのチェックを省略することは禁止
+
+- `git commit --no-verify`を利用して、lefthookのチェックを省略することは禁止
 
 ### 6. 注意事項
 
@@ -576,12 +801,13 @@ feat(reviews): ドキュメントレビュー承認機能を追加
 
 ### 4. gh コマンドの使用
 
-# 現在のブランチ名を取得
+#### 現在のブランチ名を取得
+
 current_branch=$(git branch --show-current)
 
-# プルリクエスト作成コマンド
+##### プルリクエスト作成コマンド
 
-````bash
+```bash
 gh pr create \
   --base development \
   --head "$current_branch" \
@@ -604,4 +830,4 @@ gh pr create \
 
 - 特に確認してほしい点を明記
 - コードの複雑な部分には補足説明を追加
-````
+```
