@@ -25,7 +25,8 @@ const config: KnipConfig = {
     'src/env/**/*',
     'scripts/**/*',
     'vitest.setup.ts',
-    'lefthook.yml'
+    'lefthook.yml',
+    'src/lib/utils.ts'
   ],
   ignoreDependencies: [
     '@mswjs/.+',
@@ -33,8 +34,15 @@ const config: KnipConfig = {
     '@storybook/.+',
     '@types/.+',
     '@typescript-eslint/.+',
-    'better-typescript-lib'
+    'better-typescript-lib',
+    'class-variance-authority',
+    'tailwindcss-animate',
+    'tailwind-merge',
+    'autoprefixer',
+    'lucide-react',
+    'clsx'
   ],
+  ignoreBinaries: ['lefthook'],
   ignoreExportsUsedInFile: true
 }
 

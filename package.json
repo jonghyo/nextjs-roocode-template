@@ -9,14 +9,15 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage",
-    "lint": "eslint --max-warnings 0",
+    "lint": "eslint --max-warnings 0 --cache --cache-strategy content --cache-location node_modules/.cache/eslint/",
     "lint:inspect": "eslint --inspect-config",
     "lint:build-inspect": "npx @eslint/config-inspector build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "msw": "vite --host --mode development",
     "tsc": "npx tsc --noEmit",
-    "knip": "npx knip --production --reporter markdown --cache --tags=-knipignore"
+    "knip": "npx knip --production --reporter markdown --cache --tags=-knipignore",
+    "license-check": ". .env && license-checker-rseidelsohn --production --summary --excludePrivatePackages --onlyAllow \"$ALLOWED_LICENSES\""
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.12.0",
@@ -79,6 +80,7 @@
     "jsdom": "^26.0.0",
     "knip": "^5.44.5",
     "lefthook": "^1.11.0",
+    "license-checker-rseidelsohn": "^4.4.2",
     "msw": "^2.7.3",
     "npm-run-all2": "^7.0.2",
     "postcss": "^8",
@@ -90,7 +92,6 @@
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.25.0",
     "vite": "^6",
-    "vite-plugin-node": "^4.0.0",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.7"
   }

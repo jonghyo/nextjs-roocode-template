@@ -1,0 +1,235 @@
+name: CI
+
+on:
+  # 動作確認しやすいように手動起動をサポート
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# ワークフローレベルでパーミッションをすべて無効化
+permissions: {}
+
+# デフォルトシェルでパイプエラーを有効化
+defaults:
+  run:
+    shell: bash
+
+# 1ブランチで1ワークフローのみ実行。連続でジョブが実行されるのを抑制
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    # 6時間も待たされないようにタイムアウトを設定
+    timeout-minutes: 5
+    # ジョブレベルで必要最小限のパーミッションを定義
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Cache NPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package.json', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Cache ESLint
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/eslint
+          key: ${{ runner.os }}-eslint-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**/eslint*.{js,json}') }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run ESLint
+        run: npm run lint
+
+  tsc:
+    name: tsc
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Cache NPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package.json', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run TypeScript
+        run: npm run tsc
+
+  npm_audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Cache NPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package.json', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate --omit=dev
+
+  knip:
+    name: Knip
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Cache NPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package.json', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Knip
+        run: npm run knip
+
+  license-check:
+    name: License Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Cache NPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package.json', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run License Checker
+        run: |
+          # 環境変数を.envから読み取る
+          ALLOWED_LICENSES=$(grep ALLOWED_LICENSES .env | cut -d '=' -f 2 | tr -d '"')
+          npx license-checker-rseidelsohn --production --summary --excludePrivatePackages --onlyAllow "$ALLOWED_LICENSES"
+
+  unit_test:
+    name: Unit Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Cache NPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package.json', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Unit Tests and Coverage
+        run: npm run coverage
+      - name: 'Report Coverage'
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          json-summary-path: coverage/coverage-summary.json
+      - name: Upload Coverage Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
+          include-hidden-files: true
+      - name: Upload Test Reports Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: reports
+          include-hidden-files: true
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write
+    needs: [eslint, tsc, knip, unit_test, npm_audit, license-check]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Cache NPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package.json', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build Project
+        run: npm run build -- --no-lint
+      - name: Create Artifacts
+        run: |
+          mkdir -p dist
+          cp -r .next/standalone dist/
+          cp -r .next/static dist/standalone/.next/
+          cp -r -u public dist/standalone
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist
+          include-hidden-files: true
