@@ -13,6 +13,7 @@ const config = {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     passWithNoTests: true,
+    watch: false,
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     reporters: ['html', 'junit', 'default'],
     outputFile: {
