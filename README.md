@@ -105,13 +105,15 @@ Visit [http://localhost:3000](http://localhost:3000) to see your application.
 
 ```bash
 src/
-├── app/              # Next.js App Router files
-├── components/       # React components
+├── __mocks__/       # Mock definitions
+├── __tests__/       # Test files
+├── app/             # Next.js App Router files
+├── components/      # React components
 │   ├── features/    # Feature-specific components
 │   ├── layout/      # Layout components
 │   └── ui/          # Base UI components
-├── lib/             # Utility functions and shared logic
-└── __tests__/       # Test files
+├── env/             # Environment variables definition for t3-env
+└── lib/             # Utility functions and shared logic
 ```
 
 ## Development Guidelines
