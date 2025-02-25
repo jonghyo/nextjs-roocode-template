@@ -16,7 +16,8 @@
     "build-storybook": "storybook build",
     "msw": "vite --host --mode development",
     "tsc": "npx tsc --noEmit",
-    "knip": "npx knip --production --reporter markdown --cache --tags=-knipignore"
+    "knip": "npx knip --production --reporter markdown --cache --tags=-knipignore",
+    "license-check": "source .env && license-checker-rseidelsohn --production --summary --excludePrivatePackages --onlyAllow \"$ALLOWED_LICENSES\""
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.12.0",
@@ -79,6 +80,7 @@
     "jsdom": "^26.0.0",
     "knip": "^5.44.5",
     "lefthook": "^1.11.0",
+    "license-checker-rseidelsohn": "^4.4.2",
     "msw": "^2.7.0",
     "npm-run-all2": "^7.0.2",
     "postcss": "^8",
