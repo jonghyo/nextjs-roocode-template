@@ -1,38 +1,137 @@
-[![build status](https://github.com/jonghyo/nextjs-roocode-template/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jonghyo/nextjs-roocode-template/actions/workflows/ci.yml)
+# Next.js Template for RooCode AI Development [![build status](https://github.com/jonghyo/nextjs-roocode-template/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jonghyo/nextjs-roocode-template/actions/workflows/ci.yml)
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a specialized Next.js template designed for AI-powered code generation using RooCode. It includes comprehensive configuration files and development rules to maximize the effectiveness of AI-assisted development.
+
+## 🤖 RooCode Integration
+
+This template comes pre-configured with essential files for RooCode AI development:
+
+- `.clinerules` - Defines technical stack, development workflows, and coding standards for AI
+- `.roomodes` - Configures custom AI modes for different development tasks
+- Pre-configured development workflows optimized for AI collaboration
+- Automated code quality checks and formatting rules that align with AI-generated code
+
+## Features
+
+- 🎯 Optimized for AI-assisted development with RooCode
+- 🚀 [Next.js](https://nextjs.org/) with App Router for robust routing and server-side rendering
+- 💎 [TypeScript](https://www.typescriptlang.org/) for type safety
+- 🎨 [shadcn/ui](https://ui.shadcn.com/) + [Tailwind CSS](https://tailwindcss.com/) for beautiful, customizable UI components
+- 📦 [Zustand](https://github.com/pmndrs/zustand) for state management
+- 🧪 [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for testing
+- 📚 [Storybook](https://storybook.js.org/) for component documentation
+- ✨ [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) for code quality
+- 🔍 Pre-commit hooks with [lefthook](https://github.com/evilmartians/lefthook)
+- 🛠️ Additional tools and libraries:
+  - [Zod](https://zod.dev/) for schema validation
+  - [React Hook Form](https://react-hook-form.com/) for form management
+  - Day.js for date handling
+  - NextAuth.js for authentication
+  - [Pino](https://github.com/pinojs/pino) for logging
+  - MSW for API mocking
+  - Playwright for E2E testing
+
+## AI Development Configuration
+
+### .clinerules
+
+The `.clinerules` file defines:
+
+- Technical stack specifications
+- Development workflow phases
+- Coding standards and best practices
+- Testing requirements
+- Security guidelines
+
+### .roomodes
+
+Custom AI modes for different development tasks:
+
+- PM Mode: Project management and requirements definition
+- Architect Mode: System design and architecture planning
+- Code Mode: Implementation and testing
+- Debug Mode: Problem diagnosis and resolution
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (LTS version)
+- npm
+- RooCode extension installed in VS Code
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd nextjs-roocode-template
+```
+
+2. Install dependencies:
+
+```bash
+npm ci
+```
+
+3. Copy the environment file:
+
+```bash
+cp .env.example .env
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) to see your application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+- `npm test` - Run tests with Vitest
+- `npm run test:coverage` - Generate test coverage report
+- `npm run storybook` - Start Storybook development server
+- `npm run tsc` - Check TypeScript types
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+src/
+├── app/              # Next.js App Router files
+├── components/       # React components
+│   ├── features/    # Feature-specific components
+│   ├── layout/      # Layout components
+│   └── ui/          # Base UI components
+├── lib/             # Utility functions and shared logic
+└── __tests__/       # Test files
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Development Guidelines
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Follow the development workflow defined in `.clinerules`
+- Utilize appropriate AI modes for different development tasks
+- Follow the TypeScript coding standards
+- Write comprehensive tests for new features
+- Update Storybook documentation for UI components
+- Ensure ESLint and Prettier rules are followed
+- Use shadcn/ui components when possible
+- Follow the commit message convention
 
-## Deploy on Vercel
+## Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Create a feature branch from `main`
+2. Make your changes following the AI development guidelines
+3. Run tests and ensure all checks pass
+4. Submit a pull request to `main`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) file for details.
