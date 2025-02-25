@@ -17,7 +17,7 @@
     "msw": "vite --host --mode development",
     "tsc": "npx tsc --noEmit",
     "knip": "npx knip --production --reporter markdown --cache --tags=-knipignore",
-    "license-check": "source .env && license-checker-rseidelsohn --production --summary --excludePrivatePackages --onlyAllow \"$ALLOWED_LICENSES\""
+    "license-check": ". .env && license-checker-rseidelsohn --production --summary --excludePrivatePackages --onlyAllow \"$ALLOWED_LICENSES\""
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.12.0",

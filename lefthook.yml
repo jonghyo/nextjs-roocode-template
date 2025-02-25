@@ -15,7 +15,7 @@ pre-commit:
       run: npx secretlint --maskSecrets --secretlintignore .gitignore "{staged_files}"
     license-check:
       glob: 'package-lock.json'
-      run: source .env && npx license-checker-rseidelsohn --production --summary --excludePrivatePackages --onlyAllow "$ALLOWED_LICENSES"
+      run: . .env && npx license-checker-rseidelsohn --production --summary --excludePrivatePackages --onlyAllow "$ALLOWED_LICENSES"
 
 commit-msg:
   commands:
