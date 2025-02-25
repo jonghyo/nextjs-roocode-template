@@ -149,9 +149,9 @@ jobs:
         run: npm ci
       - name: Run License Checker
         run: |
-          pwd
-          ls -ahl
-          npm run license-check
+          # 環境変数を.envから読み取る
+          ALLOWED_LICENSES=$(grep ALLOWED_LICENSES .env | cut -d '=' -f 2 | tr -d '"')
+          npx license-checker-rseidelsohn --production --summary --excludePrivatePackages --onlyAllow "$ALLOWED_LICENSES"
 
   unit_test:
     name: Unit Test
