@@ -79,7 +79,7 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "jsdom": "^26.0.0",
     "knip": "^5.45.0",
-    "lefthook": "^1.11.0",
+    "lefthook": "^1.11.1",
     "license-checker-rseidelsohn": "^4.4.2",
     "msw": "^2.7.3",
     "npm-run-all2": "^7.0.2",
