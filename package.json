@@ -78,7 +78,7 @@
     "eslint-plugin-storybook": "^0.11.1",
     "eslint-plugin-unused-imports": "^4.1.4",
     "jsdom": "^26.0.0",
-    "knip": "^5.44.5",
+    "knip": "^5.45.0",
     "lefthook": "^1.11.0",
     "license-checker-rseidelsohn": "^4.4.2",
     "msw": "^2.7.3",
