@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 export const register = async () => {
   //Next.jsサーバー起動時に環境変数が設定されているか確認
   console.log('Validating Environent Variables.')

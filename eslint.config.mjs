@@ -59,7 +59,6 @@ const config = tseslint.config(
     rules: {
       'arrow-body-style': ['error', 'as-needed'],
       'func-style': 'error',
-      'no-console': 2,
       // NOTE: https://typescript-eslint.io/troubleshooting/faqs/eslint#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
       'no-undef': 'off',
       'no-unused-vars': 'off',
@@ -133,6 +132,13 @@ const config = tseslint.config(
             'object',
             'type',
             'index'
+          ],
+          pathGroups: [
+            {
+              pattern: '@/**',
+              group: 'internal',
+              position: 'after'
+            }
           ],
           'newlines-between': 'always',
           pathGroupsExcludedImportTypes: ['builtin'],
