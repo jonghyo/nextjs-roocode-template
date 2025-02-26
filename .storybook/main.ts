@@ -14,18 +14,19 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs',
     options: {}
   },
-  refs: {
-    '@chakra-ui/react': {
-      disable: true
-    }
-  },
   staticDirs: ['../public'],
-  webpackFinal: (config) => {
-    config.resolve ??= {}
-    config.resolve.alias ??= {}
-    config.resolve.alias['@/styled-system'] = path.resolve(__dirname, '../styled-system')
-    config.resolve.alias['@'] = path.resolve(__dirname, '../src')
+  webpackFinal: async (config) => {
+    if (config.resolve) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@': path.resolve(__dirname, '../src')
+      }
+    }
     return config
+  },
+  docs: {
+    autodocs: true
   }
 }
+
 export default config
