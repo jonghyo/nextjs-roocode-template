@@ -40,7 +40,7 @@
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9.17.0",
     "@mswjs/http-middleware": "^0.10.2",
-    "@next/eslint-plugin-next": "^15.1.2",
+    "@next/eslint-plugin-next": "^15.2.0",
     "@secretlint/secretlint-rule-preset-recommend": "^9.2.0",
     "@storybook/addon-essentials": "^8.6.0",
     "@storybook/addon-interactions": "^8.6.0",
