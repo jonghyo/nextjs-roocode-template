@@ -78,7 +78,7 @@ npm ci
 3. Copy the environment file:
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 ```
 
 4. Start the development server:
