@@ -1,0 +1,115 @@
+# PM Mode Rules
+
+## 開発フロー
+
+開発は以下フェーズで実施します。
+
+```mermaid
+flowchart LR
+    %% AIモード
+    subgraph Modes [AIモード]
+        direction LR
+        PMMode[PMモード<br>プロジェクト管理]
+        PMOMode[PMOモード<br>ルール遵守確認]
+        ArchMode[Architectモード<br>システム設計]
+        CodeMode[Codeモード<br>実装とテスト]
+    end
+
+    %% メインフロー
+    Start([開始]) --> RC[1.ルール<br>確認]
+    RC --> RD[2.要件<br>定義]
+    RD --> DS[3.設計]
+    DS --> IM[4.実装]
+    IM --> TS[5.テスト]
+
+    %% フェーズ終了時の共通処理（メインフローの下に配置）
+    subgraph PhaseEnd [フェーズ終了時の処理]
+        direction LR
+        Commit[成果物を<br>git commit]
+        --> Review[ユーザに<br>レビュー依頼]
+    end
+
+    %% 各フェーズと終了処理の接続（右下へ向かって）
+    RC --> PhaseEnd
+    RD --> PhaseEnd
+    DS --> PhaseEnd
+    IM --> PhaseEnd
+    TS --> PhaseEnd
+
+    PhaseEnd --> NextPhase{次のフェーズ<br>があるか？}
+    NextPhase -->|Yes| NextStart[次のフェーズへ]
+    NextPhase -->|No| End([完了])
+
+    %% モードと各フェーズの関連（上部から下への矢印）
+    PMMode -.-> RD
+    PMOMode -.-> RC
+    PMOMode -.-> PMOCheck
+    ArchMode -.-> DS
+    CodeMode -.-> IM
+    CodeMode -.-> TS
+
+    %% スタイル定義
+    classDef phaseNode fill:#f5f5ff,stroke:#333,stroke-width:1px
+    class RC,RD,DS,IM,TS phaseNode
+
+    classDef processNode fill:#fff5f5,stroke:#333,stroke-width:1px
+    class PMOCheck,Commit,Review,Correct processNode
+
+    classDef modeNode fill:#e6f7ff,stroke:#0066cc,stroke-width:1px
+    class PMMode,PMOMode,ArchMode,CodeMode modeNode
+
+    classDef decisionNode fill:#fffbf5,stroke:#333,stroke-width:1px
+    class Fix,NextPhase decisionNode
+```
+
+## 要件定義フェーズ
+
+```mermaid
+flowchart TD
+    Start([要件定義開始]) --> RD1[ブランチ作成]
+    RD1 --> RD1a[feature/機能名]
+    RD1 --> RD1b[fix/バグ名]
+    RD1 --> RD1c[hotfix/緊急バグ名]
+    RD1a --> RD2[要件・機能一覧作成]
+    RD1b --> RD2
+    RD1c --> RD2
+    RD2 --> RD3[docs/requirements-definition.mdに記載]
+    RD3 --> RD4[markdownlintの標準ルールに従う]
+    RD4 --> End([要件定義完了])
+
+    classDef reqNode fill:#f9f9f9,stroke:#333,stroke-width:1px
+    class RD1,RD1a,RD1b,RD1c,RD2,RD3,RD4 reqNode
+```
+
+1. ブランチ名: feature/[機能名]、fix/[バグ名]、hotfix/[緊急バグ名]でgitブランチを作成し、作業を開始してください
+2. 与えられた指示に対する要件・機能一覧を`docs/requirements-definition.md`に記載します
+
+- mdファイルは、markdownlintの標準的なルールに従って作成します
+
+### ドキュメント作成規約
+
+#### requirements-definition.md
+
+1. 要件定義ドキュメントの構成
+
+   - プロジェクト概要
+   - 機能要件一覧
+   - 非機能要件一覧
+   - 制約条件
+   - 前提条件
+
+2. 機能一覧フォーマット
+   - 機能ID
+   - 機能名
+   - 機能概要
+   - 優先度
+   - 依存関係
+   - 制約事項
+
+#### markdownlint規約
+
+- インデントは2スペース
+- 見出しレベルは順番に使用
+- コードブロックは言語指定
+- リストは一貫した記号を使用
+- 改行は2行まで
