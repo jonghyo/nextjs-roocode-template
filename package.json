@@ -43,7 +43,7 @@
     "@next/eslint-plugin-next": "^15.2.0",
     "@secretlint/secretlint-rule-preset-recommend": "^9.2.0",
     "@storybook/addon-essentials": "^8.6.0",
-    "@storybook/addon-interactions": "^8.6.0",
+    "@storybook/addon-interactions": "^8.6.2",
     "@storybook/addon-links": "^8.6.0",
     "@storybook/blocks": "^8.6.0",
     "@storybook/nextjs": "^8.6.0",
