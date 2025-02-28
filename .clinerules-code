@@ -1,0 +1,210 @@
+# Code Mode Rules
+
+## 期待する回答
+
+- 実装コードは省略せず、完全な形で提供
+- TypeScript の型定義も含める
+- セキュリティのベストプラクティスに従った実装
+- レスポンシブデザインを考慮した UI/UX 提案
+- 日本語での詳細な説明
+- テスト容易性を考慮したコンポーネント設計
+- git commit時はlefthookのpre-commitフックを通す
+- コードベースのドキュメントを変更内容に合わせて更新するのを忘れるな
+
+## アプリケーションコーディング規約
+
+- 既存のESLint, Prettier設定に準拠
+- コンポーネント設計は Composition API を使用
+- 関数やコンポーネントには適切なコメントを含める
+- Next.jsのSuspenseBoundaryを使用してローディング状態を管理
+- ロジックはコンポーネントから分離し、ユーティリティ関数に切り出す
+- ロジックの再利用性を高めるため、関数コンポーネントを使用
+- コンポーネントの再利用性を高めるため、スロットを活用
+- テスト可能なコンポーネント設計
+- 副作用の分離
+
+### ネーミングルール
+
+- ディレクトリ: ケバブケース
+- ファイル名: ケバブケース
+- コンポーネント名: パスカルケース
+- 変数名: キャメルケース
+- 定数名: スネークケース
+- React hook名: キャメルケース
+- CSSクラス名: Tailwind CSSのクラス名を使用
+
+### Next.js特有の規約
+
+- params should be awaitedのエラーが出ないようにparamsをawaitしてください。例： `const { id } = await params;`
+- paramsもPromiseで受け取ってください。例： `{ params: Promise<{ id: string }> }`
+
+## コンポーネント実装規約
+
+### コンポーネント種類別規約
+
+#### ボタン系
+
+- shadcn/uiのボタンコンポーネントをベースに実装
+- クリックハンドラは handle[Action]Click の形式で命名
+- disabled状態の視覚的フィードバックを実装（btn-disabled）
+- loading状態の表現を統一（loading属性）
+- ボタンの種類に応じたスタイル（btn-primary, btn-ghost等）を適切に使用
+- クリックイベントの型安全を確保するため、TypeScriptによる型定義を実施
+
+#### モーダル系
+
+- shadcn/uiのmodalコンポーネントをベースに実装
+- isVisible プロパティで表示制御
+- フォーカストラップの実装
+- キーボード操作（Escape）対応
+
+#### リスト系
+
+- shadcn/uiのtableコンポーネントをベースに実装
+- ページネーションの実装
+- ソート・フィルタ機能の統一的な実装
+- 空の状態の表示を統一（empty-state）
+- ローディング状態の表示（loading）
+- エラーハンドリングにおける適切なエラー処理のため、custom error handling functionsを実装
+
+### エラーハンドリング
+
+- Next.jsのErrorBoundaryを使用してエラーハンドリング
+  - try-catch による適切なエラーハンドリング
+- ユーザーフレンドリーなエラーメッセージの表示
+- エラー状態のログ記録
+  - Pinoを使用してエラーログを記録
+
+## テスト実装規約
+
+- AAAパターンを用いてテストケースを記述
+
+### コンポーネントテスト
+
+#### ファイル構成
+
+- コンポーネントと同じディレクトリ構造を維持
+- ファイル名は `[ComponentName].spec.ts`
+- テストケースは機能単位でグループ化
+
+#### テストケース設計
+
+- コンポーネントのマウント状態の検証
+- Props、イベント、スロットの動作確認
+- 条件分岐による表示/非表示の検証
+- ユーザーインタラクションのテスト
+- エラー状態のハンドリング
+- wrapper.vm の使用など、内部実装の検証を避ける
+
+#### テストデータ
+
+- Factoryパターンを使用したデータ生成
+- 現実的なテストデータの準備
+- 境界値と異常値のテスト
+
+#### テストデータ生成とモック処理
+
+- 個々のテストケースにあわせたテストデータ生成の可視性を確保
+- まとめたテストデータ生成やモック処理は避ける
+
+### リポジトリテスト
+
+#### ファイル構成
+
+- リポジトリと同じディレクトリ構造を維持
+- ファイル名は `[RepositoryName].spec.ts`
+- CRUD操作ごとにグループ化
+
+#### テストケース設計
+
+- 基本的なCRUD操作の検証
+- エラーケースの網羅的なテスト
+- データの整合性チェック
+- リレーションを含むクエリの検証
+
+#### テストデータ管理
+
+- テストデータの作成と削除
+- クリーンアップ処理の確実な実行
+
+### テストデータ生成とモック処理の規約
+
+#### データスコープの明確化
+
+- グローバルデータ（Factory生成のベースデータ）は先頭のdescribeブロックの直前に配置
+- テストケース固有のデータは各テストケース内で定義
+- 特定のテストグループでのみ使用するデータはそのdescribeブロック内で定義
+
+#### モック処理の実装
+
+- モック関数は`vi.hoisted`で定義
+
+```ts
+const { fetchFromRepository, validateUtil } = vi.hoisted(() => ({
+  fetchFromRepository: vi.fn(),
+  validateUtil: vi.fn()
+}))
+```
+
+#### Repositoryのモック
+
+- 必ず `{ data, error }` の形式で返却
+- エラーがない場合は明示的に `error: null` を設定
+- エラーの場合は文字列か `{ message: string }` を使用
+
+```ts
+// 成功パターン
+repositoryMock.mockResolvedValue({ data: result, error: null })
+
+// エラーパターン
+repositoryMock.mockResolvedValue({
+  data: null,
+  error: { message: 'データの取得に失敗しました' }
+})
+```
+
+#### Utilsのモック
+
+- 戻り値の形式は関数の実装に応じて自由
+- 型定義に従った値を返却
+
+```ts
+// 成功パターン
+validateUtil.mockResolvedValue(true)
+formatUtil.mockReturnValue('formatted text')
+calculateUtil.mockReturnValue(100)
+
+// エラーパターン
+validateUtil.mockRejectedValue(new Error('バリデーションエラー'))
+```
+
+## コード変更後の確認
+
+1. ビルドの確認npm run build
+
+2. 変更したファイルのユニットテスト実行
+
+- テストファイルの命名規則: `[FileName].spec.ts`
+- テストファイルの配置: `src/spec/` 以下の対応するディレクトリ
+  - コンポーネント: `src/spec/components/`
+  - ユーティリティ: `src/spec/utils/`
+  - リポジトリ: `src/spec/repositories/`
+
+例：
+
+### 特定のテストファイルを実行
+
+```bash
+npm run test:unit src/spec/utils/example.spec.ts
+```
+
+### 特定のディレクトリ内の全テストを実行
+
+```bash
+npm run test:unit src/spec/utils/
+```
+
+注意：
+
+- テストファイルは変更したソースコードに対応するものを実行
+- テストが続けて失敗した場合は、ユーザーに問題を報告して指示を求める
