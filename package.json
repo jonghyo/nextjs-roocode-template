@@ -42,7 +42,7 @@
     "@mswjs/http-middleware": "^0.10.2",
     "@next/eslint-plugin-next": "^15.2.0",
     "@secretlint/secretlint-rule-preset-recommend": "^9.2.0",
-    "@storybook/addon-essentials": "^8.6.2",
+    "@storybook/addon-essentials": "^8.6.3",
     "@storybook/addon-interactions": "^8.6.3",
     "@storybook/addon-links": "^8.6.2",
     "@storybook/blocks": "^8.6.3",
