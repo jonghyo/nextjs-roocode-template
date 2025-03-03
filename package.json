@@ -47,7 +47,7 @@
     "@storybook/addon-links": "^8.6.2",
     "@storybook/blocks": "^8.6.3",
     "@storybook/nextjs": "^8.6.3",
-    "@storybook/react": "^8.6.0",
+    "@storybook/react": "^8.6.3",
     "@storybook/test": "^8.6.3",
     "@tailwindcss/postcss": "^4.0.9",
     "@testing-library/jest-dom": "^6.6.3",
