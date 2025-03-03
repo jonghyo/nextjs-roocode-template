@@ -84,7 +84,7 @@
     "msw": "^2.7.3",
     "npm-run-all2": "^7.0.2",
     "postcss": "^8",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "secretlint": "^9.2.0",
     "storybook": "^8.6.2",
