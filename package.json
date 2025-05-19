@@ -20,18 +20,18 @@
     "license-check": ". .env && license-checker-rseidelsohn --production --summary --excludePrivatePackages --onlyAllow \"$ALLOWED_LICENSES\""
   },
   "dependencies": {
-    "@t3-oss/env-nextjs": "^0.12.0",
+    "@t3-oss/env-nextjs": "^0.13.4",
     "autoprefixer": "^10.4.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.487.0",
-    "next": "15.2.5",
-    "pino": "^9.6.0",
+    "lucide-react": "^0.511.0",
+    "next": "15.3.2",
+    "pino": "^9.7.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwind-merge": "^3.2.0",
+    "tailwind-merge": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.24.2"
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.6",
