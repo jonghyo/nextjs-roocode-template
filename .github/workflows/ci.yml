@@ -184,13 +184,13 @@ jobs:
         with:
           json-summary-path: coverage/coverage-summary.json
       - name: Upload Coverage Report Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-report
           path: coverage
           include-hidden-files: true
       - name: Upload Test Reports Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-reports
           path: reports
@@ -228,7 +228,7 @@ jobs:
           cp -r .next/static dist/standalone/.next/
           cp -r -u public dist/standalone
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build-artifacts
           path: dist
